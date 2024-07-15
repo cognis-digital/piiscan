@@ -1,1 +1,2 @@
 2024-06-16T17:21:51  refactor: tidy internals
+2024-07-15T12:38:58  fix: handle empty input gracefully
