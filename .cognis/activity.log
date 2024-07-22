@@ -38,3 +38,4 @@
 2026-05-30T18:20:40  docs: here be dragons
 2024-06-06T17:01:11  ci(core): handle empty and malformed input
 2024-06-20T12:18:18  fix: handle empty input gracefully
+2024-07-22T19:35:25  refactor(mcp): add type hints to the public API
