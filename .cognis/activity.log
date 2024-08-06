@@ -39,3 +39,4 @@
 2024-06-06T17:01:11  ci(core): handle empty and malformed input
 2024-06-20T12:18:18  fix: handle empty input gracefully
 2024-07-22T19:35:25  refactor(mcp): add type hints to the public API
+2024-08-06T14:52:32  test(fixtures): support stdin as a source
