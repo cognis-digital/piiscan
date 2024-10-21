@@ -43,3 +43,4 @@
 2024-08-20T09:09:39  build(io): add usage examples to help
 2024-09-04T16:26:46  chore(docs): lower memory on big inputs
 2024-09-19T11:43:53  docs: ELI5 pass
+2024-10-21T18:00:00  style(engine): add a dry-run flag
