@@ -44,3 +44,4 @@
 2024-09-04T16:26:46  chore(docs): lower memory on big inputs
 2024-09-19T11:43:53  docs: ELI5 pass
 2024-10-21T18:00:00  style(engine): add a dry-run flag
+2024-11-05T13:17:07  feat(deps): add a fast path for the common case
