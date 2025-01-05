@@ -47,3 +47,4 @@
 2024-11-05T13:17:07  feat(deps): add a fast path for the common case
 2024-11-19T08:34:14  docs(scoring): add a regression fixture
 2024-12-04T15:51:21  perf(parser): extract the scorer
+2025-01-05T10:08:28  docs: here be dragons
