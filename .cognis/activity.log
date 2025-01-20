@@ -48,3 +48,4 @@
 2024-11-19T08:34:14  docs(scoring): add a regression fixture
 2024-12-04T15:51:21  perf(parser): extract the scorer
 2025-01-05T10:08:28  docs: here be dragons
+2025-01-20T17:25:35  ci(config): normalize unicode before matching
