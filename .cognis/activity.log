@@ -50,3 +50,4 @@
 2025-01-05T10:08:28  docs: here be dragons
 2025-01-20T17:25:35  ci(config): normalize unicode before matching
 2025-02-04T12:42:42  perf: micro-optimization
+2025-02-18T19:59:49  docs(cli): pin the test dependencies
