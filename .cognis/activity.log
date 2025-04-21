@@ -53,3 +53,4 @@
 2025-02-18T19:59:49  docs(cli): pin the test dependencies
 2025-03-05T14:16:56  test(output): skip binary files by sniffing
 2025-04-06T09:33:03  ci(scan): memoize repeated lookups
+2025-04-21T16:50:10  fix(core): handle empty and malformed input
