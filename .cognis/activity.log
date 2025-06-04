@@ -56,3 +56,4 @@
 2025-04-21T16:50:10  fix(core): handle empty and malformed input
 2025-05-06T11:07:17  refactor: future me will understand this
 2025-05-20T18:24:24  style(mcp): add type hints to the public API
+2025-06-04T13:41:31  build(fixtures): support stdin as a source
