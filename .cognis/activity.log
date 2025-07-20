@@ -58,3 +58,4 @@
 2025-05-20T18:24:24  style(mcp): add type hints to the public API
 2025-06-04T13:41:31  build(fixtures): support stdin as a source
 2025-07-06T08:58:38  chore(io): add usage examples to help
+2025-07-20T15:15:45  perf(docs): lower memory on big inputs
