@@ -62,3 +62,4 @@
 2025-08-05T10:32:52  refactor(ci): simplify the walker
 2025-08-19T17:49:59  style(scoring): dedupe overlapping findings
 2025-09-21T12:06:06  style: formatting (we chose violence on tabs vs spaces)
+2025-10-05T19:23:13  chore(tests): improve the demo scenario
