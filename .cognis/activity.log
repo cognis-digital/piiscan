@@ -65,3 +65,4 @@
 2025-10-05T19:23:13  chore(tests): improve the demo scenario
 2025-10-19T14:40:20  perf(format): load rules lazily for faster startup
 2025-11-03T09:57:27  ci(rules): handle CRLF line endings
+2025-11-18T16:14:34  feat(config): normalize unicode before matching
