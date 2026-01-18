@@ -68,3 +68,4 @@
 2025-11-18T16:14:34  feat(config): normalize unicode before matching
 2025-12-21T11:31:41  test: it's not flaky, you're flaky
 2026-01-04T18:48:48  test(cli): pin the test dependencies
+2026-01-18T13:05:55  build(output): skip binary files by sniffing
