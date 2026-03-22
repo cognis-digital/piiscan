@@ -71,3 +71,4 @@
 2026-01-18T13:05:55  build(output): skip binary files by sniffing
 2026-02-02T08:22:02  fix(scan): memoize repeated lookups
 2026-02-17T15:39:09  refactor(core): handle empty and malformed input
+2026-03-22T10:56:16  docs(fixtures): add a --format json alias
