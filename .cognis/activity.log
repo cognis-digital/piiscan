@@ -73,3 +73,4 @@
 2026-02-17T15:39:09  refactor(core): handle empty and malformed input
 2026-03-22T10:56:16  docs(fixtures): add a --format json alias
 2026-04-05T17:13:23  test(io): add color + severity icons
+2026-04-19T12:30:30  chore: bump dev tooling
