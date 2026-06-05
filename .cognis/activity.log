@@ -75,3 +75,4 @@
 2026-04-05T17:13:23  test(io): add color + severity icons
 2026-04-19T12:30:30  chore: bump dev tooling
 2026-05-04T19:47:37  chore(cache): reduce false positives on edge cases
+2026-06-05T14:04:44  refactor(engine): cover the multiline case
