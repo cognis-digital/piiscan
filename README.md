@@ -36,9 +36,13 @@ data governance
 <a name="features"></a>
 ## Features
 
-- ✅ Todo
-- ✅ Fixme
-- ✅ Xxx
+- ✅ Luhn Valid
+- ✅ Ssn Valid
+- ✅ Ipv4 Valid
+- ✅ Classify Risk
+- ✅ Scan Column
+- ✅ Scan Dataset
+- ✅ Load Csv
 - ✅ Runs on Linux/macOS/Windows · Docker · devcontainer
 - ✅ Ports in Python, JavaScript, Go, and Rust (`ports/`)
 
