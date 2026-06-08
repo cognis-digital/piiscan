@@ -1,0 +1,7 @@
+customer_id,full_name,email,phone,ssn,card_number,signup_ip,birth_date,notes,region
+C0001,Jane Doe,jane.doe@example.com,+1 415-555-0132,123-45-6789,4111 1111 1111 1111,192.168.10.24,1988-04-12,Prefers email contact,WEST
+C0002,John Smith,john.smith@acme.io,(212) 555-0199,234-56-7890,5500005555555559,10.0.0.5,1975-11-30,Called back at 212-555-0199,EAST
+C0003,Maria Garcia,maria.garcia@mail.net,312.555.0144,345-67-8901,340000000000009,172.16.4.9,1992-02-08,No special notes,CENTRAL
+C0004,Robert Brown,rob.brown@corp.com,650-555-0177,456-78-9012,6011000000000004,8.8.8.8,1969-07-21,reach me robert.alt@corp.com,WEST
+C0005,Linda Nguyen,linda.nguyen@example.org,+1 (646) 555-0188,567-89-0123,4012888888881881,203.0.113.42,2001-09-15,VIP customer,EAST
+C0006,David Wilson,david.wilson@shop.co,503-555-0123,678-90-1234,30000000000004,198.51.100.7,1983-12-01,Followup phone 503-555-0123,WEST
