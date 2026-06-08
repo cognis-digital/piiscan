@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: { name: piiscan, labels: { app: piiscan } }
+spec:
+  replicas: 1
+  selector: { matchLabels: { app: piiscan } }
+  template:
+    metadata: { labels: { app: piiscan } }
+    spec:
+      containers:
+        - name: piiscan
+          image: ghcr.io/cognis-digital/piiscan:latest
+          ports: [{ containerPort: 8000 }]
+          resources:
+            requests: { cpu: "50m", memory: "64Mi" }
+            limits: { cpu: "500m", memory: "256Mi" }
+---
+apiVersion: v1
+kind: Service
+metadata: { name: piiscan }
+spec:
+  selector: { app: piiscan }
+  ports: [{ port: 80, targetPort: 8000 }]
