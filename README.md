@@ -16,7 +16,7 @@
 </div>
 
 ```bash
-pip install cognis-piiscan
+pip install "git+https://github.com/cognis-digital/piiscan.git"
 piiscan scan .            # → prioritized findings in seconds
 ```
 
@@ -52,7 +52,7 @@ data governance
 ## Quick start
 
 ```bash
-pip install cognis-piiscan
+pip install "git+https://github.com/cognis-digital/piiscan.git"
 piiscan --version
 piiscan scan .                       # scan current project
 piiscan scan . --format json         # machine-readable
