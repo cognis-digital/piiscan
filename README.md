@@ -20,6 +20,41 @@ pip install cognis-piiscan
 piiscan scan .            # → prioritized findings in seconds
 ```
 
+## Usage — step by step
+
+1. Install the CLI (Python 3.9+):
+
+   ```bash
+   pip install git+https://github.com/cognis-digital/piiscan.git
+   ```
+
+2. Scan a CSV extract (e.g. a warehouse export) for PII:
+
+   ```bash
+   piiscan scan customers.csv
+   ```
+
+3. Tune sampling and confidence, and emit JSON for cataloging:
+
+   ```bash
+   piiscan scan customers.csv --sample 5000 --format json > pii.json
+   ```
+
+4. Hide low-confidence columns in the table view:
+
+   ```bash
+   piiscan scan customers.csv --min-confidence 0.7
+   ```
+
+5. Profile exports for PII in a pipeline:
+
+   ```yaml
+   - name: pii discovery
+     run: |
+       pip install git+https://github.com/cognis-digital/piiscan.git
+       piiscan scan export.csv --format json
+   ```
+
 ## Contents
 
 - [Why piiscan?](#why) · [Features](#features) · [Quick start](#quick-start) · [Example](#example) · [Architecture](#architecture) · [AI stack](#ai-stack) · [How it compares](#how-it-compares) · [Integrations](#integrations) · [Install anywhere](#install-anywhere) · [Related](#related) · [Contributing](#contributing)
