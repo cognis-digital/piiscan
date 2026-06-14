@@ -34,3 +34,6 @@ piiscan = "piiscan.cli:main"
 
 [tool.hatch.build.targets.wheel]
 packages = ["piiscan"]
+
+[tool.hatch.metadata]
+allow-direct-references = true
