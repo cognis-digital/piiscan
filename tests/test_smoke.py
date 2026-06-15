@@ -4,6 +4,7 @@ import io
 import json
 import os
 import sys
+import tempfile
 import unittest
 import contextlib
 
@@ -18,6 +19,7 @@ from piiscan import (  # noqa: E402
     classify_risk,
 )
 from piiscan.cli import main  # noqa: E402
+from piiscan.core import load_csv  # noqa: E402
 
 DEMO_CSV = os.path.join(
     os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
@@ -108,6 +110,112 @@ class TestCLI(unittest.TestCase):
         buf = io.StringIO()
         with contextlib.redirect_stderr(buf):
             code = main(["scan", "/nonexistent/path/nope.csv"])
+        self.assertEqual(code, 1)
+
+
+class TestEdgeCases(unittest.TestCase):
+    """Tests for input validation, error paths, and edge cases added during hardening."""
+
+    # --- scan_column edge cases ---
+
+    def test_scan_column_none_values(self):
+        """scan_column with None values does not raise and has 0 samples scanned."""
+        # Use a neutral column name so no name-hint fires.
+        rep = scan_column("col_x", None)
+        self.assertEqual(rep.samples_scanned, 0)
+        self.assertFalse(rep.is_pii)
+
+    def test_scan_column_all_none_or_blank(self):
+        """Columns where every value is None or blank have 0 samples scanned."""
+        # Neutral name avoids the name-hint path.
+        rep = scan_column("col_y", [None, "", "   "])
+        self.assertEqual(rep.samples_scanned, 0)
+        self.assertFalse(rep.is_pii)
+
+    def test_scan_column_empty_list(self):
+        """Empty column with no name hint returns zero confidence."""
+        rep = scan_column("order_id", [])
+        self.assertEqual(rep.max_confidence, 0.0)
+        self.assertFalse(rep.is_pii)
+
+    # --- scan_dataset edge cases ---
+
+    def test_scan_dataset_empty_columns(self):
+        """Empty column dict returns a zero-column report."""
+        rep = scan_dataset("empty_ds", {})
+        self.assertEqual(rep.columns_scanned, 0)
+        self.assertEqual(rep.pii_columns, 0)
+        self.assertEqual(rep.entity_rollup(), {})
+
+    def test_scan_dataset_none_columns(self):
+        """None columns dict returns a zero-column report without crashing."""
+        rep = scan_dataset("none_ds", None)
+        self.assertEqual(rep.columns_scanned, 0)
+        self.assertEqual(rep.pii_columns, 0)
+
+    # --- load_csv edge cases ---
+
+    def test_load_csv_bom_utf8(self):
+        """load_csv handles UTF-8-with-BOM files (common Excel export)."""
+        with tempfile.NamedTemporaryFile(
+            mode="wb", suffix=".csv", delete=False
+        ) as f:
+            # Write UTF-8 BOM + CSV content
+            f.write(b"\xef\xbb\xbfname,email\r\nAlice,alice@example.com\r\n")
+            fpath = f.name
+        try:
+            _, cols = load_csv(fpath)
+            self.assertIn("name", cols)
+            self.assertIn("email", cols)
+            self.assertEqual(cols["email"], ["alice@example.com"])
+        finally:
+            os.unlink(fpath)
+
+    def test_load_csv_sample_limit(self):
+        """load_csv honours the sample limit and does not read extra rows."""
+        with tempfile.NamedTemporaryFile(
+            mode="w", suffix=".csv", delete=False, encoding="utf-8", newline=""
+        ) as f:
+            f.write("id,val\n")
+            for i in range(20):
+                f.write(f"{i},value{i}\n")
+            fpath = f.name
+        try:
+            _, cols = load_csv(fpath, sample=5)
+            self.assertEqual(len(cols["id"]), 5)
+        finally:
+            os.unlink(fpath)
+
+    # --- CLI validation ---
+
+    def test_cli_bad_sample(self):
+        """--sample 0 should return exit code 1 with a clear error."""
+        buf = io.StringIO()
+        with contextlib.redirect_stderr(buf):
+            code = main(["scan", DEMO_CSV, "--sample", "0"])
+        self.assertEqual(code, 1)
+        self.assertIn("--sample", buf.getvalue())
+
+    def test_cli_bad_min_confidence_high(self):
+        """--min-confidence 1.5 is out of range — should return exit code 1."""
+        buf = io.StringIO()
+        with contextlib.redirect_stderr(buf):
+            code = main(["scan", DEMO_CSV, "--min-confidence", "1.5"])
+        self.assertEqual(code, 1)
+        self.assertIn("--min-confidence", buf.getvalue())
+
+    def test_cli_bad_min_confidence_negative(self):
+        """--min-confidence -0.1 is out of range — should return exit code 1."""
+        buf = io.StringIO()
+        with contextlib.redirect_stderr(buf):
+            code = main(["scan", DEMO_CSV, "--min-confidence", "-0.1"])
+        self.assertEqual(code, 1)
+
+    def test_cli_no_subcommand_returns_1(self):
+        """Invoking without a subcommand prints help and returns exit code 1."""
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            code = main([])
         self.assertEqual(code, 1)
 
 

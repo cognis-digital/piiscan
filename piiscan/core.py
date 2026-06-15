@@ -256,12 +256,22 @@ def classify_risk(confidence: float, sensitivity: int) -> str:
 # --------------------------------------------------------------------------- #
 def scan_column(
     column_name: str,
-    values: list,
+    values,
     detectors: Optional[list[Detector]] = None,
 ) -> ColumnReport:
-    """Scan one column's sampled values against all detectors."""
+    """Scan one column's sampled values against all detectors.
+
+    ``values`` may be any iterable (list, tuple, generator).  ``None`` is
+    treated as an empty column.  Non-string values are coerced to str.
+    """
     detectors = detectors if detectors is not None else DEFAULT_DETECTORS
-    samples = [str(v) for v in values if v is not None and str(v).strip() != ""]
+    if values is None:
+        values = []
+    try:
+        raw = list(values)
+    except TypeError:
+        raw = []
+    samples = [str(v) for v in raw if v is not None and str(v).strip() != ""]
     n = len(samples)
     report = ColumnReport(column=column_name, samples_scanned=n)
 
@@ -300,10 +310,20 @@ def scan_column(
 
 def scan_dataset(
     dataset_name: str,
-    columns: dict,
+    columns: Optional[dict],
     detectors: Optional[list[Detector]] = None,
 ) -> ScanReport:
-    """Scan a dataset given as a mapping of column name -> list of values."""
+    """Scan a dataset given as a mapping of column name -> list of values.
+
+    ``columns`` may be ``None`` or an empty dict — returns a zero-column report.
+    """
+    if not columns:
+        return ScanReport(
+            dataset=dataset_name or "",
+            columns_scanned=0,
+            pii_columns=0,
+            column_reports=[],
+        )
     column_reports = [
         scan_column(name, values, detectors) for name, values in columns.items()
     ]
@@ -317,20 +337,44 @@ def scan_dataset(
 
 
 def load_csv(path: str, sample: int = 1000) -> tuple[str, dict]:
-    """Load a CSV file into a column->values mapping (sampling rows)."""
+    """Load a CSV file into a column->values mapping (sampling rows).
+
+    Tries UTF-8-with-BOM first, then falls back to latin-1 so that files
+    exported from Excel or Windows tools are handled without crashing.
+
+    Raises
+    ------
+    FileNotFoundError
+        If ``path`` does not exist.
+    ValueError
+        If the file is empty, has no header row, or cannot be parsed as CSV.
+    OSError / UnicodeDecodeError
+        Propagated from the underlying file open.
+    """
     import csv
     import os
 
-    columns: dict[str, list] = {}
-    with open(path, newline="", encoding="utf-8") as fh:
-        reader = csv.DictReader(fh)
-        if reader.fieldnames is None:
-            raise ValueError(f"no header row in {path}")
-        for c in reader.fieldnames:
-            columns[c] = []
-        for i, row in enumerate(reader):
-            if i >= sample:
-                break
-            for c in reader.fieldnames:
-                columns[c].append(row.get(c))
-    return os.path.basename(path), columns
+    if sample < 1:
+        raise ValueError(f"sample must be >= 1, got {sample}")
+
+    def _read(enc: str) -> tuple[str, dict]:
+        columns: dict[str, list] = {}
+        with open(path, newline="", encoding=enc) as fh:
+            reader = csv.DictReader(fh)
+            # Trigger header read so we can check fieldnames.
+            fieldnames = reader.fieldnames
+            if not fieldnames:
+                raise ValueError(f"no header row in {path}")
+            for c in fieldnames:
+                columns[c] = []
+            for i, row in enumerate(reader):
+                if i >= sample:
+                    break
+                for c in fieldnames:
+                    columns[c].append(row.get(c))
+        return os.path.basename(path), columns
+
+    try:
+        return _read("utf-8-sig")
+    except UnicodeDecodeError:
+        return _read("latin-1")

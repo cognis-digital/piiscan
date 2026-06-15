@@ -87,6 +87,23 @@ def main(argv=None) -> int:
         parser.print_help()
         return 1
 
+    # Validate --sample
+    if args.sample < 1:
+        print(
+            f"error: --sample must be >= 1, got {args.sample}",
+            file=sys.stderr,
+        )
+        return 1
+
+    # Validate --min-confidence
+    if not (0.0 <= args.min_confidence <= 1.0):
+        print(
+            f"error: --min-confidence must be between 0.0 and 1.0, "
+            f"got {args.min_confidence}",
+            file=sys.stderr,
+        )
+        return 1
+
     try:
         dataset_name, columns = load_csv(args.path, sample=args.sample)
     except FileNotFoundError:
@@ -94,6 +111,13 @@ def main(argv=None) -> int:
         return 1
     except (ValueError, OSError, UnicodeDecodeError) as exc:
         print(f"error: could not read {args.path}: {exc}", file=sys.stderr)
+        return 1
+
+    if not columns:
+        print(
+            f"error: no columns found in {args.path}",
+            file=sys.stderr,
+        )
         return 1
 
     report = scan_dataset(dataset_name, columns)
