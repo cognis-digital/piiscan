@@ -1,0 +1,13 @@
+$ piiscan-emit --help
+
+usage: piiscan [-h] [--version] {scan} ...
+
+PII discovery across warehouses and data lakes (data-side scanner).
+
+positional arguments:
+  {scan}
+    scan      Scan a CSV file for PII.
+
+options:
+  -h, --help  show this help message and exit
+  --version   show program's version number and exit

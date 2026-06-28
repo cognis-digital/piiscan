@@ -20,6 +20,57 @@ pip install cognis-piiscan
 piiscan scan .            # → prioritized findings in seconds
 ```
 
+
+<!-- cognis:example:start -->
+## 🔎 Example output
+
+Real, reproducible output from the tool — runs offline:
+
+```console
+$ piiscan-emit --version
+piiscan 0.1.0
+```
+
+```console
+$ piiscan-emit --help
+usage: piiscan [-h] [--version] {scan} ...
+
+PII discovery across warehouses and data lakes (data-side scanner).
+
+positional arguments:
+  {scan}
+    scan      Scan a CSV file for PII.
+
+options:
+  -h, --help  show this help message and exit
+  --version   show program's version number and exit
+```
+
+> Blocks above are real `piiscan` output — reproduce them from a clone.
+
+**Sample result format** _(illustrative values — run on your own data for real findings):_
+
+```
+{
+    "indicator": {
+        "id": "1234567890",
+        "title": "Suspicious Activity Detected",
+        "description": "Anomalous network traffic detected from IP address 192.168.1.100",
+        "confidence": 80,
+        "labels": ["Network", "Threat"]
+    },
+    "observable": {
+        "id": "abc123",
+        "type": "ip-dns",
+        "value": "example.com"
+    }
+}
+
+piiscan-emit --to stix findings.json
+```
+
+<!-- cognis:example:end -->
+
 ## Usage — step by step
 
 1. Install the CLI (Python 3.9+):
